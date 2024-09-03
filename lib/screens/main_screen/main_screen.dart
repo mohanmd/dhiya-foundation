@@ -57,9 +57,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.now();
-    // ignore: deprecated_member_use
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, result) async {
         return commonDialog(context, exitQuit(context));
       },
       child: GestureDetector(

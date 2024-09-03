@@ -7,7 +7,7 @@ import 'package:in4_solution/providers/all_providers.dart';
 import 'package:in4_solution/screens/auth_screens/login_screen.dart';
 import 'package:in4_solution/screens/auth_screens/splash_screen.dart';
 import 'package:in4_solution/screens/main_screen/main_screen.dart';
-import 'package:secure_shared_preferences/secure_shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -65,8 +65,9 @@ class AuthProvider extends ChangeNotifier {
 
   void clearData(BuildContext context) async {
     provdLocation.deleteAttendanceData();
-    var pref = await SecureSharedPref.getInstance();
-    pref.clearAll();
+    // var pref = await SecureSharedPref.getInstance();
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.clear();
     // await encryptedSharedPreferences.remove(LocalVariable.accessToken);
     // await encryptedSharedPreferences.remove(LocalVariable.userData);
     // await encryptedSharedPreferences.remove(LocalVariable.attendanceData);
@@ -92,24 +93,25 @@ class AuthProvider extends ChangeNotifier {
   // }
 
   Future checkSplashScreen(BuildContext context) async {
-    var pref = await SecureSharedPref.getInstance();
+    // var pref = await SecureSharedPref.getInstance();
+    final SharedPreferences pref = await SharedPreferences.getInstance();
     try {
-      await pref.getMap(LocalVariable.userData).then((user) async {
+      final encryptData = pref.getString(LocalVariable.userData);
+      final decodedData = jsonDecode(encryptData ?? '{}'); 
         getCreds();
-        if (user == null || user.isEmpty) {
+        if (decodedData == null || decodedData.isEmpty) {
           forwarderLoginScreen(context);
         } else {
-          await pref.getString(LocalVariable.accessToken).then((token) {
+          if (pref.getString(LocalVariable.accessToken) != null)  {
             // logger.i(user);
             // logger.i(token);
-            accessToken = token ?? '';
-            userData = user;
+            accessToken = pref.getString(LocalVariable.accessToken) ?? '';
+            userData = decodedData;
             notifyListeners();
             authLoadingOff();
             refresh(context);
-          });
-        }
-      });
+          };
+        } 
     } catch (e) {
       authLoadingOff();
       forwarderLoginScreen(context);
@@ -117,14 +119,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void setCheckLocalDatas(BuildContext context) async {
-    var pref = await SecureSharedPref.getInstance();
+    // var pref = await SecureSharedPref.getInstance();
+    final SharedPreferences pref = await SharedPreferences.getInstance();
     // await checkCheckInData();
-    await pref.getString(LocalVariable.attendanceData).then((value) {
-      if (value != null) {
+     final attendanceData = pref.getString(LocalVariable.attendanceData);
+      if (attendanceData != null) {
         Provider.of<LocationProvider>(context, listen: false)
-            .storeAttendanceData(context, jsonDecode(value));
-      }
-    });
+            .storeAttendanceData(context, jsonDecode(attendanceData));
+      } 
   }
 
   refreshIfHadInternet(BuildContext context) async {
@@ -170,7 +172,8 @@ class AuthProvider extends ChangeNotifier {
   }
 
   refreshCustom(BuildContext context) async {
-    var pref = await SecureSharedPref.getInstance();
+    // var pref = await SecureSharedPref.getInstance();
+    final SharedPreferences pref = await SharedPreferences.getInstance();
     clearCheckinData();
     ApiService().get(context, "refresh").then((value) {
       if (value['status']) {
@@ -179,34 +182,42 @@ class AuthProvider extends ChangeNotifier {
         }
         userData = value['user'];
         accessToken = value['access_token'];
-        pref.putString(LocalVariable.accessToken, value['access_token']);
+        pref.setString(LocalVariable.accessToken, value['access_token']);
         notifyListeners();
-        pref.putMap(LocalVariable.userData, value['user'] ?? {});
+        final encodedData = jsonDecode(value['user'] ?? {});
+        pref.setStringList(LocalVariable.userData, encodedData);
       }
     });
   }
 
   setData(BuildContext context, Map data) async {
-    var pref = await SecureSharedPref.getInstance();
+    // var pref = await SecureSharedPref.getInstance();
+    var pref = await SharedPreferences.getInstance();
     userData = data["user"];
     isHadAttendance = data["user"]["mobile_att"] != 2;
     accessToken = data["access_token"];
-    pref.putString(LocalVariable.accessToken, data["access_token"]);
+    pref.setString(LocalVariable.accessToken, data["access_token"]);
     notifyListeners();
-    pref.putMap(LocalVariable.userData, data["user"]).then((value) {
-      authLoadingOff();
-      return forwarderMainScreen(context);
-    });
+    final encodedData = jsonEncode(data["user"]);
+    pref.setString(LocalVariable.userData, encodedData);
+    authLoadingOff();
+    return forwarderMainScreen(context); 
   }
 
   void storeCreds(Map data) async {
-    var pref = await SecureSharedPref.getInstance();
-    pref.putMap(LocalVariable.loginCreds, data);
+    // var pref = await SecureSharedPref.getInstance();
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(LocalVariable.loginCreds, jsonEncode(data));
   }
 
   Future getCreds() async {
-    var pref = await SecureSharedPref.getInstance();
-    loginCreds = await pref.getMap(LocalVariable.loginCreds) ?? {};
+    // var pref = await SecureSharedPref.getInstance();
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(LocalVariable.loginCreds, "");
+    final loginCredsData = pref.getString(LocalVariable.loginCreds) ?? '';
+    if(loginCredsData.isNotEmpty){
+      loginCreds = jsonDecode(loginCredsData); 
+    }  
     notifyListeners();
     return;
   }
@@ -281,7 +292,8 @@ class AuthProvider extends ChangeNotifier {
 
   Future logout(BuildContext context) async {
     // FocusScope.of(context).unfocus();
-    var pref = await SecureSharedPref.getInstance();
+    // var pref = await SecureSharedPref.getInstance();
+    var pref = await SharedPreferences.getInstance();
     await getCreds();
     ApiService().post(context, "logout");
     checkInData = {};
@@ -290,7 +302,7 @@ class AuthProvider extends ChangeNotifier {
     userData.clear();
     provdLocation.deleteAttendanceData();
     provdAttendance.clearMonthlyAttendance();
-    await pref.clearAll();
+    await pref.clear();
     storeCreds(loginCreds);
     notifyListeners();
     forwarderSplashScreen(context);

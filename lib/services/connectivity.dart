@@ -12,10 +12,10 @@ class MyConnectivity {
   Stream get myStream => _controller.stream;
 
   void initialise() async {
-    ConnectivityResult result = await _connectivity.checkConnectivity();
-    _checkStatus(result);
+    List<ConnectivityResult> result = await _connectivity.checkConnectivity();
+    _checkStatus(result.first);
     _connectivity.onConnectivityChanged.listen((result) {
-      _checkStatus(result);
+      _checkStatus(result.first);
     });
   }
 

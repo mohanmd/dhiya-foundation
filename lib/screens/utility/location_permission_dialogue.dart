@@ -7,15 +7,19 @@ class LocationPermissionDialogue extends StatefulWidget {
   const LocationPermissionDialogue({super.key, required this.onTap});
   final VoidCallback onTap;
   @override
-  State<LocationPermissionDialogue> createState() => _LocationPermissionDialogueState();
+  State<LocationPermissionDialogue> createState() =>
+      _LocationPermissionDialogueState();
 }
 
-class _LocationPermissionDialogueState extends State<LocationPermissionDialogue> {
+class _LocationPermissionDialogueState
+    extends State<LocationPermissionDialogue> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        return willPop();
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -27,11 +31,13 @@ class _LocationPermissionDialogueState extends State<LocationPermissionDialogue>
                   borderRadius: BorderRadius.circular(8)),
               width: context.widthFull() - 32,
               child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset('assets/location_permission.png', height: 250),
+                      Image.asset('assets/location_permission.png',
+                          height: 250),
 
                       textCustom(
                           ' Hi there! To provide you with accurate check-in and check-out information, we need your permission to access your location. This will help us determine your current whereabouts and offer you relevant services.',
