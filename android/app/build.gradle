@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.iproat.in4"
     compileSdk localProperties.getProperty("flutter.compileSdkVersion").toInteger()
-    ndkVersion "26.1.10909125"
+    ndkVersion localProperties.getProperty('flutter.ndkVersion')
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
