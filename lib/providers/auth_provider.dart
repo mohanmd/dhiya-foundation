@@ -185,7 +185,7 @@ class AuthProvider extends ChangeNotifier {
         pref.setString(LocalVariable.accessToken, value['access_token']);
         notifyListeners();
         final encodedData = jsonDecode(value['user'] ?? {});
-        pref.setStringList(LocalVariable.userData, encodedData);
+        pref.setString(LocalVariable.userData, encodedData);
       }
     });
   }
@@ -213,7 +213,7 @@ class AuthProvider extends ChangeNotifier {
   Future getCreds() async {
     // var pref = await SecureSharedPref.getInstance();
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString(LocalVariable.loginCreds, "");
+    // pref.setString(LocalVariable.loginCreds, "");
     final loginCredsData = pref.getString(LocalVariable.loginCreds) ?? '';
     if(loginCredsData.isNotEmpty){
       loginCreds = jsonDecode(loginCredsData); 
