@@ -4,17 +4,7 @@ import 'enums.dart';
 
 class ColorConfig {
   final AppTarget target;
-  late final Color brand,
-      accent,
-      muted,
-      dark,
-      light,
-      border,
-      static,
-      success,
-      danger,
-      warning,
-      info;
+  late final Color brand, accent, muted, dark, light, border, static, success, danger, warning, info;
 
   ColorConfig({required this.target}) {
     switch (target) {
@@ -26,6 +16,11 @@ class ColorConfig {
         primaryColor();
         common();
         break;
+      case AppTarget.dhiyafoundation:
+        dhivyafoundation();
+        common();
+        break;
+
       default:
         primaryColor();
         common();
@@ -50,6 +45,10 @@ class ColorConfig {
 
   primaryColor() {
     brand = const Color(0xff41B3F9);
+  }
+
+  dhivyafoundation() {
+    brand = const Color(0xff1b4e9b);
   }
 
   reliance() {

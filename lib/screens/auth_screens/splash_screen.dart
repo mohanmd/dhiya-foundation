@@ -1,5 +1,6 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:in4_solution/config/enums.dart';
 import 'package:provider/provider.dart';
 
 import '/../constants/contexts.dart';
@@ -15,8 +16,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool loading = false;
-  final EncryptedSharedPreferences encryptedSharedPreferences =
-      EncryptedSharedPreferences();
+  final EncryptedSharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences();
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -29,8 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //     :
       Future.delayed(const Duration(seconds: 1)).then((value) {
         setState(() => loading = true);
-        Provider.of<AuthProvider>(context, listen: false)
-            .checkSplashScreen(context);
+        Provider.of<AuthProvider>(context, listen: false).checkSplashScreen(context);
       });
     });
     super.initState();
@@ -45,8 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/In4 Solution.png",
-              width: context.widthHalf(), fit: BoxFit.cover),
+          Image.asset("assets/${targetDetail.appname}.png", width: context.widthHalf(), fit: BoxFit.cover),
           const SizedBox(height: 32),
           loading ? loader35() : const SizedBox(height: 35)
         ],

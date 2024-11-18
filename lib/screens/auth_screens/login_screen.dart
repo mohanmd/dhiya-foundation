@@ -33,10 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     determinePosition();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (provdAuth.loginCreds.isNotEmpty) {
-        commonBottomSheet(
-            context,
-            SavedPasswordScreen(
-                creds: provdAuth.loginCreds, onTap: () => setValue()));
+        commonBottomSheet(context, SavedPasswordScreen(creds: provdAuth.loginCreds, onTap: () => setValue()));
       }
     });
     super.initState();
@@ -61,17 +58,12 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              Image.asset("assets/In4 Solution.png",
-                  width: MediaQuery.of(context).viewInsets.bottom != 0
-                      ? context.widthQuarter()
-                      : context.widthHalf(),
-                  fit: BoxFit.cover),
+              Image.asset("assets/${targetDetail.appname}.png",
+                  width: MediaQuery.of(context).viewInsets.bottom != 0 ? context.widthQuarter() : context.widthHalf(), fit: BoxFit.cover),
               const SizedBox(height: 64),
-              textFieldAuth(
-                  email, "Name", TextInputType.text, false, Icons.person),
+              textFieldAuth(email, "Name", TextInputType.text, false, Icons.person),
               Stack(children: [
-                textFieldAuth(password, "Password",
-                    TextInputType.visiblePassword, visiblity, Icons.key),
+                textFieldAuth(password, "Password", TextInputType.visiblePassword, visiblity, Icons.key),
                 Positioned(
                     right: 12,
                     top: 22,
@@ -84,8 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Icons.visibility_off,
                               color: targetDetailColor.brand.withOpacity(0.45),
                             )
-                          : Icon(Icons.visibility,
-                              color: targetDetailColor.brand),
+                          : Icon(Icons.visibility, color: targetDetailColor.brand),
                     ))
               ]),
               const SizedBox(height: 16),
@@ -97,15 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 24,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
-                          color: isRemember
-                              ? targetDetailColor.brand
-                              : Colors.white,
-                          border: Border.all(
-                              color: !isRemember
-                                  ? targetDetailColor.brand
-                                  : Colors.white)),
-                      child: const Icon(Icons.check,
-                          size: 18, color: Colors.white)),
+                          color: isRemember ? targetDetailColor.brand : Colors.white,
+                          border: Border.all(color: !isRemember ? targetDetailColor.brand : Colors.white)),
+                      child: const Icon(Icons.check, size: 18, color: Colors.white)),
                   const SizedBox(width: 8),
                   textCustom('Remember me')
                 ]),
@@ -114,23 +99,14 @@ class _LoginScreenState extends State<LoginScreen> {
               Consumer<AuthProvider>(builder: (_, provider, __) {
                 return provider.authLoading
                     ? loader35()
-                    : buttonPrimary(
-                        context.widthFull(),
-                        0,
-                        "LOGIN",
-                        () => Provider.of<AuthProvider>(context, listen: false)
-                            .login(context, email.text, password.text,
-                                isRemember));
+                    : buttonPrimary(context.widthFull(), 0, "LOGIN",
+                        () => Provider.of<AuthProvider>(context, listen: false).login(context, email.text, password.text, isRemember));
               }),
               Column(children: [
                 const SizedBox(height: 14),
                 InkWell(
-                  onTap: () => commonDialog(
-                      context, ForgotPassWordScreen(name: email.text),
-                      isHadborder: true),
-                  child: textCustom('Forgot password',
-                      color: targetDetailColor.brand,
-                      decoration: TextDecoration.underline),
+                  onTap: () => commonDialog(context, ForgotPassWordScreen(name: email.text), isHadborder: true),
+                  child: textCustom('Forgot password', color: targetDetailColor.brand, decoration: TextDecoration.underline),
                 ),
               ]),
               const Spacer(),
@@ -149,11 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: DropdownButtonFormField(
             value: selectecdLanguage,
             decoration: const InputDecoration(
-                filled: false,
-                counterText: "",
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                icon: Icon(Icons.language)),
+                filled: false, counterText: "", enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, icon: Icon(Icons.language)),
             icon: const Icon(Icons.expand_more),
             items: list.map((items) {
               return DropdownMenuItem(value: items, child: textCustom(items));

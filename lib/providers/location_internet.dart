@@ -14,6 +14,7 @@ import 'package:in4_solution/screens/main_screen/main_screen.dart';
 import 'package:in4_solution/screens/utility/dialogue.dart';
 import 'package:in4_solution/screens/utility/location_permission_dialogue.dart';
 import 'package:intl/intl.dart';
+import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 
 import '/../constants/keys.dart';
@@ -118,12 +119,10 @@ class LocationProvider extends ChangeNotifier {
 
   Future getCamera() async {
     if (isMockLocation) {
-      notif('Failed',
-          'Mock Location, turn off/uninstall mock location application.');
+      notif('Failed', 'Mock Location, turn off/uninstall mock location application.');
       return false;
     }
-    final pickedFile = await picker.pickImage(
-        source: ImageSource.camera, preferredCameraDevice: CameraDevice.front);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera, preferredCameraDevice: CameraDevice.front);
     if (pickedFile != null) {
       image = File(pickedFile.path);
       await testCompressFile(image!);
@@ -147,8 +146,7 @@ class LocationProvider extends ChangeNotifier {
 
   getBioMetric() async {
     if (isMockLocation) {
-      return notif('Failed',
-          'Mock Location, turn off/uninstall mock location application.');
+      return notif('Failed', 'Mock Location, turn off/uninstall mock location application.');
     }
     if (bioMetric == false) {
       bool safe = await bioMetricAuth();
@@ -160,8 +158,7 @@ class LocationProvider extends ChangeNotifier {
 
   Future<bool> validatePassword(String password) async {
     Map<String, String> params = {'password': password};
-    dynamic response = await ApiService()
-        .get(Get.context!, 'validate_password', params: params);
+    dynamic response = await ApiService().get(Get.context!, 'validate_password', params: params);
     bool isValidated = response['status'] ?? false;
     notif(isValidated ? 'Success' : 'Failed', response['message'] ?? '');
     return isValidated;
@@ -193,21 +190,19 @@ class LocationProvider extends ChangeNotifier {
     return apiAttendanceCheckIn();
   }
 
-  void apiAttendanceCheckIn() {
+  void apiAttendanceCheckIn() async {
     var provd = provdAuth.userData;
+    String ntpTime = await getNtpAlignedTime();
     Map<String, dynamic> data = {
       'finger_id': provd['finger_id'].toString(),
       'employee_id': provd['employee_id'].toString(),
-      'datetime':
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString(),
+      'datetime': ntpTime,
       'count': (attendanceData.length + 1).toString(),
       'latitude': latitude,
       'longitude': longitude,
       'face_id': image == null ? "null" : base64Encode(image2!),
-      'in_out_time':
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString(),
-      'check_type':
-          (provdAuth.checkInData['in_time'] ?? '').isNotEmpty ? '1' : '0'
+      'in_out_time': ntpTime,
+      'check_type': (provdAuth.checkInData['in_time'] ?? '').isNotEmpty ? '1' : '0'
     };
 
     //0 - cehckin //1 - cehckout
@@ -241,9 +236,7 @@ class LocationProvider extends ChangeNotifier {
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return ApiService().post(
-            Get.context!, "attendance/employee_attendance_list",
-            params: {'data': attendanceData.toString()}).then((value) {
+        return ApiService().post(Get.context!, "attendance/employee_attendance_list", params: {'data': attendanceData.toString()}).then((value) {
           logger.f(value);
           latitude = null;
           longitude = null;
@@ -252,13 +245,19 @@ class LocationProvider extends ChangeNotifier {
           loadingOff();
           if (value['status'] == true) {
             notif('Success', value['message']);
-            provdAuth.setCheckinData(value['in_out_data']);
+            if ((provdAuth.checkInData['in_time'] ?? '').isNotEmpty) {
+              logger.w("checkinout data $attData");
+              provdAuth.clearCheckinData();
+            } else {
+              provdAuth.setCheckinData(value['in_out_data']);
+            }
             deleteAttendanceData();
+
+            logger.w("checkinout data $value");
           } else {
             if (value['refresh'] == true) {
               notif('Failed', value['message']);
-              Provider.of<AuthProvider>(Get.context!, listen: false)
-                  .refreshCustom(Get.context!);
+              Provider.of<AuthProvider>(Get.context!, listen: false).refreshCustom(Get.context!);
               return deleteAttendanceData();
             }
             if (value['refresh'] == true) {
@@ -279,11 +278,21 @@ class LocationProvider extends ChangeNotifier {
       notif('Failed', 'Kindly check your internet connection');
       loadingOff();
     }
+
+    notifyListeners();
   }
 
   void deleteAttendanceData() async {
     attendanceData.clear();
     attendanceData = [];
     notifyListeners();
+  }
+
+  Future<String> getNtpAlignedTime({String format = 'yyyy-MM-dd HH:mm:ss'}) async {
+    DateTime localTime = DateTime.now().toLocal();
+    int ntpOffset = await NTP.getNtpOffset(localTime: localTime);
+    DateTime alignedTime = localTime.add(Duration(milliseconds: ntpOffset));
+
+    return DateFormat(format).format(alignedTime);
   }
 }

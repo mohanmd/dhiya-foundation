@@ -18,6 +18,11 @@ class AppConfig {
         appname = "In4 Solution";
         url = "https://ipro-people.com/in4solution/api/mobile/";
         break;
+      case AppTarget.dhiyafoundation:
+        appname = "Dhiya Foundation";
+        // url = "https://ipro-people.com/in4solution/api/mobile/";
+        url = "https://in4cloud.in/dhiya-foundation/api/mobile/";
+        break;
     }
   }
 }

@@ -73,12 +73,9 @@ class _MainScreenState extends State<MainScreen> {
               scrolledUnderElevation: 0,
               backgroundColor: Colors.white,
               centerTitle: false,
-              title: const Padding(
-                padding: EdgeInsets.only(left: 0),
-                child: Image(
-                    width: 100,
-                    image: AssetImage("assets/In4 Solution.png"),
-                    fit: BoxFit.cover),
+              title: Padding(
+                padding: const EdgeInsets.only(left: 0),
+                child: Image(width: 100, image: AssetImage("assets/${targetDetail.appname}.png"), fit: BoxFit.cover),
               ),
               actions: [
                 InkWell(
@@ -86,11 +83,7 @@ class _MainScreenState extends State<MainScreen> {
                     homeKey.currentState!.openDrawer();
                     FocusScope.of(context).unfocus();
                   },
-                  child: SizedBox(
-                      width: 42,
-                      height: 40,
-                      child: Icon(Icons.menu,
-                          size: 24, color: targetDetailColor.dark)),
+                  child: SizedBox(width: 42, height: 40, child: Icon(Icons.menu, size: 24, color: targetDetailColor.dark)),
                 ),
               ]),
           body: SafeArea(
@@ -101,23 +94,16 @@ class _MainScreenState extends State<MainScreen> {
                   const SizedBox(height: 16),
                   SizedBox(
                     child: Column(children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(width: 36),
-                            textTime(DateFormat('hh:mm')
-                                .format(dateTime)
-                                .toString()),
-                            const SizedBox(width: 8),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: textTimeAm(
-                                  DateFormat('a').format(dateTime).toString()),
-                            )
-                          ]),
-                      textDate(DateFormat('EEEE, dd MMM yyyy')
-                          .format(dateTime)
-                          .toString()),
+                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        const SizedBox(width: 36),
+                        textTime(DateFormat('hh:mm').format(dateTime).toString()),
+                        const SizedBox(width: 8),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: textTimeAm(DateFormat('a').format(dateTime).toString()),
+                        )
+                      ]),
+                      textDate(DateFormat('EEEE, dd MMM yyyy').format(dateTime).toString()),
                     ]),
                   ),
                   const SizedBox(height: 24),
@@ -128,16 +114,10 @@ class _MainScreenState extends State<MainScreen> {
                       visible: provider.isHadAttendance,
                       child: SizedBox(
                         child: Column(children: [
-                          (provider.checkInData['in_time'] ?? '').isEmpty
-                              ? checkIn()
-                              : checkOut(),
+                          (provider.checkInData['in_time'] ?? '').isEmpty ? checkIn() : checkOut(),
                           const SizedBox(height: 12),
-                          Consumer3<LocationProvider, CommonProvider,
-                                  AuthProvider>(
-                              builder:
-                                  ((context, provd, provider, auth, child) =>
-                                      textCheckIn(
-                                          "Punch", targetDetailColor.dark))),
+                          Consumer3<LocationProvider, CommonProvider, AuthProvider>(
+                              builder: ((context, provd, provider, auth, child) => textCheckIn("Punch", targetDetailColor.dark))),
                         ]),
                       ),
                     );
@@ -145,13 +125,11 @@ class _MainScreenState extends State<MainScreen> {
 
                   const SizedBox(height: 30),
                   SizedBox(
-                    child: Consumer2<LocationProvider, AuthProvider>(
-                        builder: (_, provd, auth, __) {
+                    child: Consumer2<LocationProvider, AuthProvider>(builder: (_, provd, auth, __) {
                       return Column(children: [
                         provd.locationLoading
                             ? Column(children: [
-                                textCheckTim("Fetching locations....",
-                                    targetDetailColor.warning),
+                                textCheckTim("Fetching locations....", targetDetailColor.warning),
                                 const SizedBox(height: 12),
                               ])
                             : const SizedBox.shrink(),
@@ -205,39 +183,24 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    Column(children: [
+                      textDate(DateFormat('hh:mm a').format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(checkInData['in_time'])).toString()),
+                      textCheckTim("Checked On", targetDetailColor.danger),
+                    ]),
+                    Column(
                       children: [
-                        Column(children: [
-                          textDate(DateFormat('hh:mm a')
-                              .format(DateFormat("yyyy-MM-dd HH:mm:ss")
-                                  .parse(checkInData['in_time']))
-                              .toString()),
-                          textCheckTim("Checked On", targetDetailColor.danger),
-                        ]),
-                        Column(
-                          children: [
-                            textDate((checkInData['out_time'] ?? '')
-                                    .toString()
-                                    .isNotEmpty
-                                ? DateFormat('hh:mm a')
-                                    .format(DateFormat("yyyy-MM-dd HH:mm:ss")
-                                        .parse(checkInData['out_time']))
-                                    .toString()
-                                : "--:--"),
-                            textCheckTim("Check Out", targetDetailColor.dark),
-                          ],
-                        ),
-                        Column(children: [
-                          textDate((DateTime.now().difference(
-                                  DateFormat("yyyy-MM-dd HH:mm:ss")
-                                      .parse(checkInData['in_time'])))
-                              .inHours
-                              .toString()),
-                          textCheckTim(
-                              "Working Hr's", targetDetailColor.danger),
-                        ])
-                      ]),
+                        textDate((checkInData['out_time'] ?? '').toString().isNotEmpty
+                            ? DateFormat('hh:mm a').format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(checkInData['out_time'])).toString()
+                            : "--:--"),
+                        textCheckTim("Check Out", targetDetailColor.dark),
+                      ],
+                    ),
+                    Column(children: [
+                      textDate((DateTime.now().difference(DateFormat("yyyy-MM-dd HH:mm:ss").parse(checkInData['in_time']))).inHours.toString()),
+                      textCheckTim("Working Hr's", targetDetailColor.danger),
+                    ])
+                  ]),
                 ));
       });
 
@@ -257,9 +220,7 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        textUser(provider.userData['employee_name'] ??
-                            '${provider.userData['user_name']}' ??
-                            ''),
+                        textUser(provider.userData['employee_name'] ?? '${provider.userData['user_name']}' ?? ''),
                         const SizedBox(height: 4),
                         textCheckTim("Employee Name", targetDetailColor.dark),
                       ],
@@ -286,15 +247,12 @@ class _MainScreenState extends State<MainScreen> {
         onTap: location.isLoading
             ? () {}
             : () {
-                Provider.of<LocationProvider>(context, listen: false)
-                    .checkFunction(false);
+                Provider.of<LocationProvider>(context, listen: false).checkFunction(false);
               },
         child: Center(
           child: Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(width: 8, color: targetDetailColor.border),
-                color: targetDetailColor.danger),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 8, color: targetDetailColor.border), color: targetDetailColor.danger),
             height: MediaQuery.of(context).size.width / 3.6,
             width: MediaQuery.of(context).size.width / 3.6,
             child: ClipRRect(
@@ -302,9 +260,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 4),
                   child: location.isLoading
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [loader80()])
+                      ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [loader80()])
                       : Center(
                           child: FaIcon(
                             FontAwesomeIcons.solidHandBackFist,
@@ -325,8 +281,7 @@ class _MainScreenState extends State<MainScreen> {
         onTap: provider.isLoading
             ? () {}
             : () {
-                Provider.of<LocationProvider>(context, listen: false)
-                    .checkFunction(true);
+                Provider.of<LocationProvider>(context, listen: false).checkFunction(true);
               },
         child: Center(child: Consumer<LocationProvider>(
           builder: (_, provd, __) {
@@ -343,12 +298,9 @@ class _MainScreenState extends State<MainScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 4),
                     child: provider.isLoading
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [loader80()])
+                        ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [loader80()])
                         : Center(
-                            child: FaIcon(FontAwesomeIcons.solidHandBackFist,
-                                size: 32, color: targetDetailColor.dark),
+                            child: FaIcon(FontAwesomeIcons.solidHandBackFist, size: 32, color: targetDetailColor.dark),
                           ),
                   )),
             );
@@ -358,13 +310,10 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Widget verifications() =>
-      Consumer2<LocationProvider, AuthProvider>(builder: (_, provd, auth, __) {
+  Widget verifications() => Consumer2<LocationProvider, AuthProvider>(builder: (_, provd, auth, __) {
         return Container(
           width: context.widthFull(),
-          decoration: BoxDecoration(
-              border: Border.all(color: targetDetailColor.brand),
-              borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(border: Border.all(color: targetDetailColor.brand), borderRadius: BorderRadius.circular(8)),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -383,14 +332,12 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         provd.isMockLocation
                             ? Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 6),
+                                padding: const EdgeInsets.symmetric(horizontal: 6),
                                 child: textError("Fake Loc. Detected"),
                               )
                             : provd.latitude != null
                                 ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
                                     child: textSuccess("Verified"),
                                   )
                                 : const SizedBox.shrink(),
@@ -400,10 +347,7 @@ class _MainScreenState extends State<MainScreen> {
                                 highlightColor: targetDetailColor.danger,
                                 enabled: true,
                                 child: GestureDetector(
-                                  onTap: () => Provider.of<LocationProvider>(
-                                          context,
-                                          listen: false)
-                                      .getLocation(),
+                                  onTap: () => Provider.of<LocationProvider>(context, listen: false).getLocation(),
                                   child: Icon(
                                     Icons.pin_drop_outlined,
                                     size: 34,
@@ -412,16 +356,11 @@ class _MainScreenState extends State<MainScreen> {
                                 ),
                               )
                             : GestureDetector(
-                                onTap: () => Provider.of<LocationProvider>(
-                                        context,
-                                        listen: false)
-                                    .getLocation(),
+                                onTap: () => Provider.of<LocationProvider>(context, listen: false).getLocation(),
                                 child: Icon(
                                   Icons.pin_drop_outlined,
                                   size: 36,
-                                  color: provd.isMockLocation
-                                      ? targetDetailColor.danger
-                                      : targetDetailColor.success,
+                                  color: provd.isMockLocation ? targetDetailColor.danger : targetDetailColor.success,
                                 ),
                               ),
                       ],
@@ -443,25 +382,19 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         provd.bioMetric
                             ? Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
                                 child: textSuccess("Verified"),
                               )
                             : const SizedBox.shrink(),
                         provd.bioMetric
-                            ? Icon(Icons.fingerprint,
-                                size: 34, color: targetDetailColor.success)
+                            ? Icon(Icons.fingerprint, size: 34, color: targetDetailColor.success)
                             : Shimmer.fromColors(
                                 baseColor: targetDetailColor.brand,
                                 highlightColor: targetDetailColor.danger,
                                 enabled: true,
                                 child: GestureDetector(
-                                  onTap: () => Provider.of<LocationProvider>(
-                                          context,
-                                          listen: false)
-                                      .getBioMetric(),
-                                  child: Icon(Icons.fingerprint,
-                                      size: 36, color: targetDetailColor.info),
+                                  onTap: () => Provider.of<LocationProvider>(context, listen: false).getBioMetric(),
+                                  child: Icon(Icons.fingerprint, size: 36, color: targetDetailColor.info),
                                 ),
                               )
                         // const SizedBox(width: 6),
@@ -486,8 +419,7 @@ class _MainScreenState extends State<MainScreen> {
                       ],
                     ),
                     ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(2)),
+                        borderRadius: const BorderRadius.all(Radius.circular(2)),
                         child: SizedBox(
                             child: provd.image == null
                                 ? Shimmer.fromColors(
@@ -495,36 +427,26 @@ class _MainScreenState extends State<MainScreen> {
                                     highlightColor: targetDetailColor.danger,
                                     enabled: true,
                                     child: GestureDetector(
-                                      onTap: () =>
-                                          Provider.of<LocationProvider>(context,
-                                                  listen: false)
-                                              .getCamera(),
+                                      onTap: () => Provider.of<LocationProvider>(context, listen: false).getCamera(),
                                       child: SizedBox(
                                         height: 34,
-                                        child: Icon(Icons.camera_alt_outlined,
-                                            size: 34,
-                                            color: targetDetailColor.info),
+                                        child: Icon(Icons.camera_alt_outlined, size: 34, color: targetDetailColor.info),
                                       ),
                                     ),
                                   )
                                 : GestureDetector(
-                                    onTap: () => Provider.of<LocationProvider>(
-                                            context,
-                                            listen: false)
-                                        .getCamera(),
+                                    onTap: () => Provider.of<LocationProvider>(context, listen: false).getCamera(),
                                     child: Row(
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12),
                                           child: textSuccess("Captured"),
                                         ),
                                         const SizedBox.shrink(),
                                         SizedBox(
                                           height: 32,
                                           width: 32,
-                                          child: Image.file(provd.image!,
-                                              fit: BoxFit.fill),
+                                          child: Image.file(provd.image!, fit: BoxFit.fill),
                                         ),
                                       ],
                                     ),
@@ -562,12 +484,9 @@ class _CheckInOutDialogState extends State<CheckInOutDialog> {
           const SizedBox(height: 12),
           textCustom("Authentication Required", size: 18),
           const SizedBox(height: 12),
-          textCustom(
-              "Kindly enter your login password to punch your attendance",
-              size: 14),
+          textCustom("Kindly enter your login password to punch your attendance", size: 14),
           const SizedBox(height: 12),
-          textFieldAuth(passwordController, "Enter Password",
-              TextInputType.text, false, Icons.password),
+          textFieldAuth(passwordController, "Enter Password", TextInputType.text, false, Icons.password),
           const SizedBox(height: 24),
           buttonPrimary(context.widthFull(), 0, "Submit", validate)
         ]),
@@ -579,8 +498,7 @@ class _CheckInOutDialogState extends State<CheckInOutDialog> {
     if (passwordController.text.isEmpty) {
       return notif('Failed', 'Kindly enter the password');
     }
-    bool isValidated =
-        await provdLocation.validatePassword(passwordController.text);
+    bool isValidated = await provdLocation.validatePassword(passwordController.text);
     Navigator.pop(context, isValidated);
   }
 }

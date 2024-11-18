@@ -29,9 +29,9 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.iproat.in4"
+    namespace "com.iproat.dhiyafoundation"
     compileSdk localProperties.getProperty("flutter.compileSdkVersion").toInteger()
-    ndkVersion localProperties.getProperty('flutter.ndkVersion')
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -47,7 +47,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.iproat.in4"
+        applicationId "com.iproat.dhiyafoundation"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion localProperties.getProperty("flutter.minSdkVersion").toInteger()
@@ -67,7 +67,7 @@ android {
     buildTypes {
         release {
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

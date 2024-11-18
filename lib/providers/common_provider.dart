@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:in4_solution/constants/keys.dart';
 import 'package:in4_solution/providers/all_providers.dart';
 
 import '/../services/api_services.dart';
@@ -20,12 +21,10 @@ class CommonProvider extends ChangeNotifier {
 
   Future getSideBarList() async {
     setCommonLoadingOn();
-    Map<String, String> params = {
-      'user_id': provdAuth.userData['user_id'].toString()
-    };
-    dynamic response =
-        await ApiService().get(Get.context!, 'role/list', params: params);
+    Map<String, String> params = {'user_id': provdAuth.userData['user_id'].toString()};
+    dynamic response = await ApiService().get(Get.context!, 'role/list', params: params);
     setCommonLoadingOff();
+    logger.w("sidebar response : $response");
     if (response['status']) {
       sideBarList = response['data'] ?? [];
       // if (sideBarList.isNotEmpty) {

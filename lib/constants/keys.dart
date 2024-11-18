@@ -17,3 +17,5 @@ GlobalKey<ScaffoldState> scrollKey = GlobalKey<ScaffoldState>();
 
 var logger = Logger();
 // var encryptedSharedPreferences = SecureSharedPref.getInstance();
+
+const googleMapKey = "AIzaSyAckm5gPM2pV9we3Clrxuyg3WJsv0BE51s";
