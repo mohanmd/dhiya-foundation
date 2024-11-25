@@ -1,17 +1,15 @@
-# Set the minimum iOS deployment target version
-platform :ios, '14.0'
+# Uncomment this line to define a global platform for your project
+platform :ios, '13.0'
 
-# Disable CocoaPods stats to improve build times
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
-# Configure the Xcode project settings
 project 'Runner', {
   'Debug' => :debug,
   'Profile' => :release,
   'Release' => :release,
 }
 
-# Define the Flutter root directory
 def flutter_root
   generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
   unless File.exist?(generated_xcode_build_settings_path)
@@ -25,32 +23,27 @@ def flutter_root
   raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
 end
 
-# Include the Flutter pod helper file
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
-# Set up Flutter iOS pods
 flutter_ios_podfile_setup
 
-# Define the main target for the Runner
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Install all Flutter iOS pods
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
-  # Add Google Maps SDK
-  pod 'GoogleMaps', '>= 7.0.0' # Replace with a specific version if needed
+  # Add GoogleMaps pod
+  pod 'GoogleMaps'
 
-  # Add test target for the Runner
   target 'RunnerTests' do
     inherit! :search_paths
   end
 end
 
-# Post-install configurations
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
   end
 end
+

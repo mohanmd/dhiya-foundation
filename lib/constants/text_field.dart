@@ -3,6 +3,37 @@ import 'package:in4_solution/config/enums.dart';
 
 import 'fonts.dart';
 
+textFieldUrl(TextEditingController control, String label,
+        TextInputType textType, bool obscure, IconData icon) =>
+    Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: SizedBox(
+        height: 45,
+        child: TextFormField(
+          cursorColor: targetDetailColor.brand,
+          cursorHeight: 24,
+          controller: control,
+          obscureText: obscure,
+          keyboardType: textType,
+          style: styleForm,
+          decoration: InputDecoration(
+            filled: true,
+            contentPadding: const EdgeInsets.only(top: 24, left: 12),
+            hintText: label,
+            hintStyle: styleHint,
+            fillColor: targetDetailColor.muted.withOpacity(0.09),
+            prefixIcon:
+                Icon(icon, color: targetDetailColor.brand.withOpacity(0.5)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: targetDetailColor.brand),
+                borderRadius: const BorderRadius.all(Radius.circular(8))),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(color: targetDetailColor.brand)),
+          ),
+        ),
+      ),
+    );
 textFieldAuth(TextEditingController control, String label,
         TextInputType textType, bool obscure, IconData icon) =>
     Padding(
