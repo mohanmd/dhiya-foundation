@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:in4_solution/constants/fonts.dart';
+import 'package:in4_solution/constants/notifications.dart';
 import 'package:in4_solution/providers/all_providers.dart';
 import 'package:in4_solution/screens/auth_screens/forgot_password.dart';
 import 'package:in4_solution/screens/auth_screens/saved_password.dart';
@@ -25,6 +26,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController url = TextEditingController();
   bool visiblity = true;
   List langaugeList = ['English', 'عربي'];
   bool isRemember = false;
@@ -43,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Map creds = provdAuth.loginCreds ?? {};
     email.text = creds['user_name'] ?? '';
     password.text = creds['password'] ?? '';
+     url.text = creds['url'] ?? '';
     isRemember = true;
     Navigator.pop(context);
     setState(() {});
@@ -61,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Image.asset("assets/${targetDetail.appname}.png",
                   width: MediaQuery.of(context).viewInsets.bottom != 0 ? context.widthQuarter() : context.widthHalf(), fit: BoxFit.cover),
               const SizedBox(height: 64),
+             
               textFieldAuth(email, "Name", TextInputType.text, false, Icons.person),
               Stack(children: [
                 textFieldAuth(password, "Password", TextInputType.visiblePassword, visiblity, Icons.key),
@@ -98,9 +102,19 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 16),
               Consumer<AuthProvider>(builder: (_, provider, __) {
                 return provider.authLoading
-                    ? loader35()
-                    : buttonPrimary(context.widthFull(), 0, "LOGIN",
-                        () => Provider.of<AuthProvider>(context, listen: false).login(context, email.text, password.text, isRemember));
+                   ? loader35()
+                    : buttonPrimary(context.widthFull(), 0, "LOGIN", () {
+                         
+                            Provider.of<AuthProvider>(context, listen: false)
+                                .login(context, email.text, password.text,
+                                    isRemember);
+                          
+                        // } else {
+                        //   Provider.of<AuthProvider>(context, listen: false)
+                        //       .login(context, email.text, password.text,
+                        //           isRemember);
+                        // }
+                      });
               }),
               Column(children: [
                 const SizedBox(height: 14),

@@ -29,7 +29,7 @@ dependencies:
   calendar_date_picker2: ^1.1.6
   datepicker_dropdown: ^0.1.4
   flutter_image_compress: ^2.3.0
-  connectivity_plus: ^6.0.5
+  connectivity_plus: ^2.3.0
   path_provider: ^2.0.13
   fluttertoast: ^8.2.8
   permission_handler: ^11.0.1
@@ -48,7 +48,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   dev: ^1.0.0
   geolocator_web: ^4.0.0
-  google_maps_flutter: ^2.9.0
+  google_maps_flutter: ^2.10.0
   ntp: ^2.0.0
 dev_dependencies:
   flutter_test:
