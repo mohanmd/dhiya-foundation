@@ -64,8 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Image.asset("assets/${targetDetail.appname}.png",
                   width: MediaQuery.of(context).viewInsets.bottom != 0 ? context.widthQuarter() : context.widthHalf(), fit: BoxFit.cover),
               const SizedBox(height: 64),
-              textFieldUrl(
-                      url, "self hosted TORV url", TextInputType.text, false, Icons.link),
+             
               textFieldAuth(email, "Name", TextInputType.text, false, Icons.person),
               Stack(children: [
                 textFieldAuth(password, "Password", TextInputType.visiblePassword, visiblity, Icons.key),
@@ -105,13 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 return provider.authLoading
                    ? loader35()
                     : buttonPrimary(context.widthFull(), 0, "LOGIN", () {
-                          if (url.text != "https://in4cloud.in/dhiya-foundation") {
-                            notif('Failed', 'Invaild URL');
-                          } else {
+                         
                             Provider.of<AuthProvider>(context, listen: false)
                                 .login(context, email.text, password.text,
                                     isRemember);
-                          }
+                          
                         // } else {
                         //   Provider.of<AuthProvider>(context, listen: false)
                         //       .login(context, email.text, password.text,
