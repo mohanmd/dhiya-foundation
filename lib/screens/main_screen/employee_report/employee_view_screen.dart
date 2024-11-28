@@ -73,7 +73,7 @@ class _EmployeeViewScreenState extends State<EmployeeViewScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InfoText(label: "Employee Name", value: "${data['employee_name'] ?? '-'}"),
-            InfoText(label: "Finger ID", value: "${widget.id ?? '-'}"),
+            InfoText(label: "Employee ID", value: "${widget.id ?? '-'}"),
             InfoText(label: "Department", value: "${data['department'] ?? '-'}"),
             InfoText(label: "Designation", value: "${data['designation'] ?? '-'}"),
             InfoText(label: "Address", value: "${data['address'] ?? '-'}"),
@@ -134,13 +134,26 @@ class PunchTimeEntry extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 0,
       child: ListTile(
-        title: const Text(
-          "Punch Time",
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(
-          "$formattedDate at $formattedTime",
-          style: const TextStyle(color: Colors.black54),
+        titleAlignment: ListTileTitleAlignment.top,
+        title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            "Remarks",
+            style: TextStyle(fontSize: 11),
+          ),
+          Text("${punchData['remark']}"),
+        ]),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Date",
+              style: TextStyle(fontSize: 11),
+            ),
+            Text(
+              "$formattedDate at $formattedTime",
+              style: const TextStyle(color: Colors.black54),
+            ),
+          ],
         ),
         leading: const Icon(Icons.location_on, color: Colors.redAccent),
         trailing: IconButton(

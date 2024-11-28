@@ -4,18 +4,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:in4_solution/config/enums.dart';
 import 'package:in4_solution/constants/contexts.dart';
 
-TextStyle styleMessage = GoogleFonts.inter(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    color: targetDetailColor.light,
-    letterSpacing: 0.25);
+TextStyle styleMessage = GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w400, color: targetDetailColor.light, letterSpacing: 0.25);
 
-notif(String head, String desc) => Get.snackbar(head, desc,
-    margin: const EdgeInsets.only(left: 8, top: 8, right: 8),
-    maxWidth: Get.context!.widthFull(),
-    duration: const Duration(seconds: 2),
-    dismissDirection: DismissDirection.horizontal,
-    animationDuration: const Duration(milliseconds: 600));
+notif(String head, String desc, {duration = 3}) => Get.snackbar(
+      head,
+      desc,
+      margin: const EdgeInsets.only(left: 8, top: 8, right: 8),
+      maxWidth: Get.context!.widthFull(),
+      duration: Duration(seconds: duration),
+      dismissDirection: DismissDirection.horizontal,
+      animationDuration: const Duration(milliseconds: 600),
+    );
 
 // notif('Error',(String head, String desc) {
 //   return showOverlayNotification((context) {
@@ -45,9 +44,7 @@ notif(String head, String desc) => Get.snackbar(head, desc,
 class MessageNotificationError extends StatelessWidget {
   final String head;
   final String desc;
-  const MessageNotificationError(
-      {Key? key, required this.head, required this.desc})
-      : super(key: key);
+  const MessageNotificationError({Key? key, required this.head, required this.desc}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,26 +59,15 @@ class MessageNotificationError extends StatelessWidget {
             margin: const EdgeInsets.all(8),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox.fromSize(
-                        size: const Size(40, 40),
-                        child: ClipOval(
-                            child: Icon(Icons.warning,
-                                size: 20, color: targetDetailColor.light))),
-                    const SizedBox(width: 16),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(head, style: styleMessage),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                              width: context.widthFull() - 96,
-                              child: Text(desc, style: styleMessage))
-                        ]),
-                  ]),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [
+                SizedBox.fromSize(size: const Size(40, 40), child: ClipOval(child: Icon(Icons.warning, size: 20, color: targetDetailColor.light))),
+                const SizedBox(width: 16),
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(head, style: styleMessage),
+                  const SizedBox(height: 4),
+                  SizedBox(width: context.widthFull() - 96, child: Text(desc, style: styleMessage))
+                ]),
+              ]),
             ),
           ),
         ),
@@ -92,8 +78,7 @@ class MessageNotificationError extends StatelessWidget {
 
 class MessageNotificationFail extends StatelessWidget {
   final String desc;
-  const MessageNotificationFail({Key? key, required this.desc})
-      : super(key: key);
+  const MessageNotificationFail({Key? key, required this.desc}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +95,7 @@ class MessageNotificationFail extends StatelessWidget {
               ),
               margin: const EdgeInsets.all(8),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -121,9 +105,7 @@ class MessageNotificationFail extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: CircleAvatar(
-                              backgroundColor: targetDetailColor.light,
-                              child: Icon(Icons.priority_high,
-                                  size: 16, color: targetDetailColor.warning)),
+                              backgroundColor: targetDetailColor.light, child: Icon(Icons.priority_high, size: 16, color: targetDetailColor.warning)),
                         )),
                     const SizedBox(width: 16),
                     SizedBox(
@@ -149,8 +131,7 @@ class MessageNotificationFail extends StatelessWidget {
 
 class MessageNotificationSuccess extends StatelessWidget {
   final String desc;
-  const MessageNotificationSuccess({Key? key, required this.desc})
-      : super(key: key);
+  const MessageNotificationSuccess({Key? key, required this.desc}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -167,8 +148,7 @@ class MessageNotificationSuccess extends StatelessWidget {
               ),
               margin: const EdgeInsets.all(8),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -178,9 +158,7 @@ class MessageNotificationSuccess extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: CircleAvatar(
-                              backgroundColor: targetDetailColor.light,
-                              child: Icon(Icons.done,
-                                  size: 16, color: targetDetailColor.success)),
+                              backgroundColor: targetDetailColor.light, child: Icon(Icons.done, size: 16, color: targetDetailColor.success)),
                         )),
                     const SizedBox(width: 16),
                     SizedBox(

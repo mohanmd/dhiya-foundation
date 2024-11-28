@@ -20,6 +20,10 @@ class ColorConfig {
         dhivyafoundation();
         common();
         break;
+      case AppTarget.gse:
+        gse();
+        common();
+        break;
 
       default:
         primaryColor();
@@ -71,8 +75,8 @@ class ColorConfig {
     brand = const Color(0xff776B26);
   }
 
-  oqic() {
-    brand = const Color(0xffab0635);
+  gse() {
+    brand = const Color(0xff264796);
   }
 
   tessam() {

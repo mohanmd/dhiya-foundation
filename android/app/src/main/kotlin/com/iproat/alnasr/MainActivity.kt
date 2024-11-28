@@ -1,4 +1,4 @@
-package com.iproat.dhiyafoundation
+package com.iproat.alnasr
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

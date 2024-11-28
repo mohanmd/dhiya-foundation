@@ -23,6 +23,10 @@ class AppConfig {
         // url = "https://ipro-people.com/in4solution/api/mobile/";
         url = "https://in4cloud.in/dhiya-foundation/api/mobile/";
         break;
+      case AppTarget.gse:
+        appname = "Global Safety Enterprices";
+        url = "https://in4cloud.in/gse/api/mobile/";
+        break;
     }
   }
 }

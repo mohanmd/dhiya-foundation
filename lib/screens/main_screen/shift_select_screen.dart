@@ -22,6 +22,15 @@ class _ShiftSelectScreenState extends State<ShiftSelectScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    hitAPi(context) {
+      if (selectedShift == null) {
+        return notif('Failed', 'Kinldy select your work shift');
+      }
+      Navigator.pop(context);
+      provdLocation.selectedShift(selectedShift?['id']);
+      provdLocation.checkFunction(true, context);
+    }
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -34,20 +43,10 @@ class _ShiftSelectScreenState extends State<ShiftSelectScreen> {
         textCustom('Work shift', size: 12, weight: FontWeight.w400),
         const SizedBox(height: 6),
         // textFieldCommon(contShift, 'Select work shift', Tex, obscure)
-        dropdownButtonCustom(
-            selectedShift, shifts, 'shift', label: 'Select your work shift', (p0) => setState(() => selectedShift = p0 as Map)),
+        dropdownButtonCustom(selectedShift, shifts, 'shift', label: 'Select your work shift', (p0) => setState(() => selectedShift = p0 as Map)),
         const SizedBox(height: 12),
-        buttonPrimary(context.widthFull(), 0, 'Confirm', () => hitAPi()),
+        buttonPrimary(context.widthFull(), 0, 'Confirm', () => hitAPi(context)),
       ]),
     );
-  }
-
-  hitAPi() {
-    if (selectedShift == null) {
-      return notif('Failed', 'Kinldy select your work shift');
-    }
-    Navigator.pop(context);
-    provdLocation.selectedShift(selectedShift?['id']);
-    provdLocation.checkFunction(true);
   }
 }

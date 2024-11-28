@@ -75,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
               centerTitle: false,
               title: Padding(
                 padding: const EdgeInsets.only(left: 0),
-                child: Image(width: 100, image: AssetImage("assets/${targetDetail.appname}.png"), fit: BoxFit.cover),
+                child: Image(width: 90, image: AssetImage("assets/${targetDetail.appname}.png"), fit: BoxFit.contain),
               ),
               actions: [
                 InkWell(
@@ -114,7 +114,7 @@ class _MainScreenState extends State<MainScreen> {
                       visible: provider.isHadAttendance,
                       child: SizedBox(
                         child: Column(children: [
-                          (provider.checkInData['in_time'] ?? '').isEmpty ? checkIn() : checkOut(),
+                          (provider.checkInData['in_time'] ?? '').isEmpty ? checkIn(context) : checkOut(context),
                           const SizedBox(height: 12),
                           Consumer3<LocationProvider, CommonProvider, AuthProvider>(
                               builder: ((context, provd, provider, auth, child) => textCheckIn("Punch", targetDetailColor.dark))),
@@ -241,13 +241,13 @@ class _MainScreenState extends State<MainScreen> {
             ));
       });
 
-  Widget checkOut() {
+  Widget checkOut(BuildContext context) {
     return Consumer<LocationProvider>(builder: (_, location, __) {
       return GestureDetector(
         onTap: location.isLoading
             ? () {}
             : () {
-                Provider.of<LocationProvider>(context, listen: false).checkFunction(false);
+                Provider.of<LocationProvider>(context, listen: false).checkFunction(false, context);
               },
         child: Center(
           child: Container(
@@ -275,13 +275,13 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Widget checkIn() {
+  Widget checkIn(BuildContext context) {
     return Consumer<LocationProvider>(builder: (_, provider, __) {
       return GestureDetector(
         onTap: provider.isLoading
             ? () {}
             : () {
-                Provider.of<LocationProvider>(context, listen: false).checkFunction(true);
+                Provider.of<LocationProvider>(context, listen: false).checkFunction(true, context);
               },
         child: Center(child: Consumer<LocationProvider>(
           builder: (_, provd, __) {

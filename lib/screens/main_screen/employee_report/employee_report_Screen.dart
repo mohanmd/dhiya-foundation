@@ -187,7 +187,7 @@ class ReportContainer extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.grey),
                     ),
-                    Text("${data['employee_id'] ?? '-'}", textAlign: TextAlign.center),
+                    Text("${data['finger_id'] ?? '-'}", textAlign: TextAlign.center),
                   ],
                 ),
               ),

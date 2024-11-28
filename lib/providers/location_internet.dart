@@ -13,6 +13,7 @@ import 'package:in4_solution/providers/all_providers.dart';
 import 'package:in4_solution/screens/main_screen/main_screen.dart';
 import 'package:in4_solution/screens/utility/dialogue.dart';
 import 'package:in4_solution/screens/utility/location_permission_dialogue.dart';
+import 'package:in4_solution/screens/utility/remarks_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
@@ -164,7 +165,7 @@ class LocationProvider extends ChangeNotifier {
     return isValidated;
   }
 
-  Future checkFunction(bool checkIn) async {
+  Future checkFunction(bool checkIn, BuildContext context) async {
     loadingOn();
     FocusScope.of(Get.context!).unfocus();
     if (latitude == null || longitude == null) {
@@ -187,10 +188,10 @@ class LocationProvider extends ChangeNotifier {
       return;
     }
 
-    return apiAttendanceCheckIn();
+    return apiAttendanceCheckIn(context);
   }
 
-  void apiAttendanceCheckIn() async {
+  void apiAttendanceCheckIn(BuildContext context) async {
     var provd = provdAuth.userData;
     String ntpTime = await getNtpAlignedTime();
     Map<String, dynamic> data = {
@@ -204,9 +205,25 @@ class LocationProvider extends ChangeNotifier {
       'in_out_time': ntpTime,
       'check_type': (provdAuth.checkInData['in_time'] ?? '').isNotEmpty ? '1' : '0'
     };
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: false,
+          child: RemarksDialog(
+            onSubmit: (remarks) {
+              data['remark'] = remarks;
+              print("checkindata $data");
+              setAttendanceData(data, context);
+            },
+          ),
+        );
+      },
+    );
 
     //0 - cehckin //1 - cehckout
-    setAttendanceData(data);
+    // setAttendanceData(data);
   }
 
   storeAttendanceData(BuildContext context, List attData) {
@@ -214,7 +231,7 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setAttendanceData(Map attData) async {
+  void setAttendanceData(Map attData, BuildContext context) async {
     attendanceData = [];
     attendanceData = [jsonEncode(attData)];
     logger.e(attendanceData);
@@ -228,10 +245,11 @@ class LocationProvider extends ChangeNotifier {
     //   logger.w(jsonDecode(value));
     //   logger.w(jsonDecode(value).length);
     // });
-    return setLocalData(attData);
+    final response = setLocalData(attData, context);
+    return response;
   }
 
-  void setLocalData(Map attData) async {
+  void setLocalData(Map attData, BuildContext context) async {
     logger.f(attendanceData);
     try {
       final result = await InternetAddress.lookup('example.com');
@@ -252,22 +270,22 @@ class LocationProvider extends ChangeNotifier {
               provdAuth.setCheckinData(value['in_out_data']);
             }
             deleteAttendanceData();
-
             logger.w("checkinout data $value");
           } else {
             if (value['refresh'] == true) {
-              notif('Failed', value['message']);
+              notif('Failed', "value['message']");
               Provider.of<AuthProvider>(Get.context!, listen: false).refreshCustom(Get.context!);
               return deleteAttendanceData();
             }
             if (value['refresh'] == true) {
-              notif('Failed', value['message']);
+              notif('Failed', value['message'], duration: 5);
               return deleteAttendanceData();
             }
             deleteAttendanceData();
-            notif('Failed', value['message']);
+            notif('Failed', value['message'], duration: 5);
             return;
           }
+          Navigator.of(context).pop();
         });
       }
     } on SocketException catch (_) {
