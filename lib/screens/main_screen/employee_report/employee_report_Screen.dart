@@ -34,7 +34,7 @@ class _EmployeeReportScreenState extends State<EmployeeReportScreen> {
   Future datePick(bool forFromDate) async {
     DateTime selectedDate = await commonDialogCommon(
       context,
-      DatePickerDialog(initialDate: DateTime.now(), firstDate: DateTime(2020, 1, 1), lastDate: DateTime.now()),
+      DatePickerDialog(initialDate: DateTime.now(), firstDate: DateTime(2020, 1, 1), lastDate: DateTime(DateTime.now().year + 3)),
     );
     if (forFromDate) {
       // ignore: use_build_context_synchronously

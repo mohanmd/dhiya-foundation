@@ -34,6 +34,9 @@
     <string>This app requires access to the location of user to be captured when the user make attendance and for extra claims.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires access to the photo library to upload photos.</string>
+	<key>NSFaceIDUsageDescription</key>
+    <string>This app requires Face ID access for authentication.</string>
+
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

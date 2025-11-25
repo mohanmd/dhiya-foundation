@@ -48,14 +48,22 @@ import '../utility/dialogue.dart';
 // }
 
 List commonSideBarList = [
-  {'id': 1, 'title': 'DashBoard', 'icon': Icons.person_outline, 'img': '', 'children': [], 'onTap': () => Navigator.pop(Get.context!)},
+  {
+    'id': 1,
+    'title': 'DashBoard',
+    'icon': Icons.person_outline,
+    'img': '',
+    'children': [],
+    'onTap': () => Navigator.pop(Get.context!)
+  },
   {
     'id': 2,
     'title': 'Day Attendance',
     'icon': Icons.description_outlined,
     'img': LocalIcons.attendanceReport,
     'children': [],
-    'onTap': () => Navigator.of(Get.context!).push(MaterialPageRoute(builder: (BuildContext context) => const AttendacneReport()))
+    'onTap': () => Navigator.of(Get.context!).push(MaterialPageRoute(
+        builder: (BuildContext context) => const AttendacneReport()))
   },
   {
     'id': 4,
@@ -64,7 +72,8 @@ List commonSideBarList = [
     'icon': Icons.document_scanner_outlined,
     'img': LocalIcons.leaveApply,
     'onTap': () {
-      Navigator.of(Get.context!).push(MaterialPageRoute(builder: (BuildContext context) => const LeaveApplication()));
+      Navigator.of(Get.context!).push(MaterialPageRoute(
+          builder: (BuildContext context) => const LeaveApplication()));
     },
   },
   {
@@ -90,7 +99,8 @@ List commonSideBarList = [
     'icon': Icons.remember_me_outlined,
     'img': LocalIcons.permissionAsk,
     'onTap': () {
-      Navigator.of(Get.context!).push(MaterialPageRoute(builder: (BuildContext context) => const PermissionAskScreen()));
+      Navigator.of(Get.context!).push(MaterialPageRoute(
+          builder: (BuildContext context) => const PermissionAskScreen()));
     },
   },
   {
@@ -100,8 +110,10 @@ List commonSideBarList = [
     'icon': Icons.remember_me_outlined,
     'img': LocalIcons.permissionReport,
     'onTap': () {
-      Provider.of<PermissionProvider>(Get.context!, listen: false).getPermissions(Get.context!);
-      Navigator.of(Get.context!).push(MaterialPageRoute(builder: (BuildContext context) => const PermissionReportScreen()));
+      Provider.of<PermissionProvider>(Get.context!, listen: false)
+          .getPermissions(Get.context!);
+      Navigator.of(Get.context!).push(MaterialPageRoute(
+          builder: (BuildContext context) => const PermissionReportScreen()));
     }
   },
   {
@@ -118,7 +130,8 @@ List commonSideBarList = [
     'icon': Icons.lock_reset_outlined,
     'img': '',
     'children': [],
-    'onTap': () => Navigator.of(Get.context!).push(MaterialPageRoute(builder: (BuildContext context) => const ChangePasswordScreen()))
+    'onTap': () => Navigator.of(Get.context!).push(MaterialPageRoute(
+        builder: (BuildContext context) => const ChangePasswordScreen()))
   },
   {
     'id': 15,
@@ -126,7 +139,8 @@ List commonSideBarList = [
     'icon': Icons.file_copy_outlined,
     'img': '',
     'children': [],
-    'onTap': () => Navigator.of(Get.context!).push(MaterialPageRoute(builder: (BuildContext context) => const EmployeeReportScreen()))
+    'onTap': () => Navigator.of(Get.context!).push(MaterialPageRoute(
+        builder: (BuildContext context) => const EmployeeReportScreen()))
   },
 ];
 
@@ -137,7 +151,8 @@ List adminSidebar = [
     'icon': Icons.file_copy_outlined,
     'img': '',
     'children': [],
-    'onTap': () => Navigator.of(Get.context!).push(MaterialPageRoute(builder: (BuildContext context) => const EmployeeReportScreen()))
+    'onTap': () => Navigator.of(Get.context!).push(MaterialPageRoute(
+        builder: (BuildContext context) => const EmployeeReportScreen()))
   },
 ];
 List sideBar = [];
@@ -190,13 +205,18 @@ class _SideBarState extends State<SideBar> {
                 ),
               ),
               ListTile(
-                  leading: Icon(Icons.logout, size: 22, color: targetDetailColor.dark),
+                  leading: Icon(Icons.logout,
+                      size: 22, color: targetDetailColor.dark),
                   horizontalTitleGap: 0,
                   title: Padding(
                     padding: const EdgeInsets.only(left: 6),
                     child: Text('Logout',
                         style: GoogleFonts.montserrat(
-                            fontSize: 14, color: targetDetailColor.dark, fontWeight: FontWeight.w400, height: 1, letterSpacing: 0.75)),
+                            fontSize: 14,
+                            color: targetDetailColor.dark,
+                            fontWeight: FontWeight.w400,
+                            height: 1,
+                            letterSpacing: 0.75)),
                   ),
                   onTap: () {
                     commonDialog(Get.context!, logoutConfirm(Get.context!));
@@ -210,23 +230,31 @@ class _SideBarState extends State<SideBar> {
 
   Widget head() => Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Image.asset("assets/${targetDetail.appname}.png", height: 140, width: 150, fit: BoxFit.fitWidth));
+      child: Image.asset("assets/${targetDetail.appname}.png",
+          height: 140, width: 150, fit: BoxFit.fitWidth));
 
   Widget middle(Map data, int index) {
     return Consumer<LayoutProvider>(builder: (_, provd, __) {
       String image = data['img'] ?? '';
-      Color color = provd.navbar == index ? Colors.white : targetDetailColor.dark;
+      Color color =
+          provd.navbar == index ? Colors.white : targetDetailColor.dark;
       return Container(
-        decoration: BoxDecoration(color: provd.navbar == index ? targetDetailColor.brand : Colors.white),
+        decoration: BoxDecoration(
+            color:
+                provd.navbar == index ? targetDetailColor.brand : Colors.white),
         child: ListTile(
-            leading: image.isNotEmpty ? Image.asset(image, height: 20, color: color) : Icon(data['icon'], size: 22, color: color),
+            leading: image.isNotEmpty
+                ? Image.asset(image, height: 20, color: color)
+                : Icon(data['icon'], size: 22, color: color),
             horizontalTitleGap: 0,
             title: Padding(
               padding: const EdgeInsets.only(left: 6),
               child: Text(data['title'],
                   style: GoogleFonts.montserrat(
                       fontSize: 14,
-                      color: provd.navbar == index ? targetDetailColor.light : targetDetailColor.dark,
+                      color: provd.navbar == index
+                          ? targetDetailColor.light
+                          : targetDetailColor.dark,
                       fontWeight: FontWeight.w400,
                       height: 1,
                       letterSpacing: 0.75)),

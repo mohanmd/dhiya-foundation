@@ -48,7 +48,7 @@ class _LeaveApplicationState extends State<LeaveApplication> {
             child: DatePickerDialog(
                 initialDate: DateTime.now(),
                 firstDate: DateTime(2000),
-                lastDate: DateTime(2025))));
+                lastDate: DateTime(DateTime.now().year + 3))));
 
     if (forFromDate) {
       fromDatePick(selectedLeaveDate);

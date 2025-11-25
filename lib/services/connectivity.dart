@@ -13,11 +13,11 @@ class MyConnectivity {
 
   void initialise() async {
     // `checkConnectivity` returns a single `ConnectivityResult`, not a list
-    ConnectivityResult result = await _connectivity.checkConnectivity();
+    ConnectivityResult result = (await _connectivity.checkConnectivity()) as ConnectivityResult;
     _checkStatus(result); // Pass the single result
 
     _connectivity.onConnectivityChanged.listen((result) {
-      _checkStatus(result); // Each change provides a single result
+      _checkStatus(result as ConnectivityResult); // Each change provides a single result
     });
   }
 
